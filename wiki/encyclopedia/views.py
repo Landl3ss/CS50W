@@ -28,13 +28,17 @@ def new_entry(request):
         form = NewEntry(request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
-            if util.get_entry(title) != None:
-                print('error') # ========================================================================
             content = form.cleaned_data['content']
+            if util.get_entry(title) != None:
+                return render(request, "encyclopedia/new_entry.html", {
+                    'error' : True,
+                    'form' : form
+                })
             util.save_entry(title, content)
             return HttpResponseRedirect(reverse('index'))
 
     return render(request, "encyclopedia/new_entry.html", {
+        'error' : False,
         'form' : NewEntry()
     })
 

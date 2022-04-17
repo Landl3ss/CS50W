@@ -9,6 +9,9 @@
     <form method="post" action="{% url 'new_entry' %}">
         {% csrf_token %}
             <div style="padding: 5%;">
+                {% if error == True %}
+                <p style="color: red;">The title you want already exists.</p>
+                {% endif %}
                 <table>
                     <thead>
                         <td></td>
@@ -26,7 +29,7 @@
                     </tbody>
                 </table>
             </div>
-            <input type="submit" href="{% url 'index' %}">
+            <input value="Save" type="submit" href="{% url 'index' %}">
     </form>
 </div>
 {% endblock %}
