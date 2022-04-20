@@ -5,16 +5,19 @@
 <form method="post" action="{% url 'create_listing' %}">
     {% csrf_token %}
     <div class="form-group">
-        <input class="form-control" autofocus type="text" name="item" placeholder="Title">
+        <input class="form-control" autofocus type="text" name="item" placeholder="Title" required>
     </div>
     <div class="form-group">
-        <input class="form-control" type="text" name="starting_price" placeholder="Starting Price">
+        <input class="form-control" name="category" placeholder="Category">
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="text" name="starting_price" placeholder="Starting Price" required>
     </div>
     <div class="form-group">
         <input class="form-control" type="text" name="image_url" placeholder="Image URL">
     </div>
     <div class="form-group">
-        <textarea class="form-control" name="description" placeholder="Description" rows="3"></textarea>
+        <textarea class="form-control" name="description" placeholder="Description" rows="3" required></textarea>
     </div>
     <input class="btn btn-primary" type="submit" value="Create Listing">
 </form>

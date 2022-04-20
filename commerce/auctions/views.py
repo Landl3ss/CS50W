@@ -76,13 +76,18 @@ def create_listing(request):
         starting_price = float(request.POST['starting_price'])
         image_url = request.POST['image_url']
         desc = request.POST['description']
-        listing = Listings(seller=User.objects.get(username=request.user), item=item, description=desc, starting_price=starting_price, current_price=starting_price, image=image_url)
+        category = request.POST['category']
+        if category == '' or category == None:
+            listing = Listings(seller=User.objects.get(username=request.user), item=item, description=desc, starting_price=starting_price, current_price=starting_price, image=image_url)
+        else:
+            listing = Listings(seller=User.objects.get(username=request.user), item=item, description=desc, starting_price=starting_price, current_price=starting_price, image=image_url, category=category)
         listing.save()
         # print(listing.seller)
         # print(listing.active)
         # print(listing.starting_price)
         # print(listing.item)
-        return HttpResponseRedirect(reverse("index"))
+        l = Listings.objects.get(seller=User.objects.get(username=request.user), item=item, description=desc, starting_price=starting_price, current_price=starting_price, image=image_url)
+        return HttpResponseRedirect(reverse("listing", kwargs={'pk': l.pk}))
 
     return render(request, "auctions/create_listing.html")
 
