@@ -3,12 +3,17 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
-from .models import User
+from .models import User, Listings, Bids, Comments
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listings = Listings.objects.all()
+    # print(listings)
+    return render(request, "auctions/index.html", {
+        'listings': listings
+    })
 
 
 def login_view(request):
@@ -61,3 +66,69 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+@login_required(login_url='login')
+def create_listing(request):
+
+    if request.method == "POST":
+        item = request.POST['item']
+        starting_price = float(request.POST['starting_price'])
+        image_url = request.POST['image_url']
+        desc = request.POST['description']
+        listing = Listings(seller=User.objects.get(username=request.user), item=item, description=desc, starting_price=starting_price, current_price=starting_price, image=image_url)
+        listing.save()
+        # print(listing.seller)
+        # print(listing.active)
+        # print(listing.starting_price)
+        # print(listing.item)
+        return HttpResponseRedirect(reverse("index"))
+
+    return render(request, "auctions/create_listing.html")
+
+
+@login_required(login_url='login')
+def listing(request, pk):
+    user = User.objects.get(username=request.user)
+    listing = Listings.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        if 'price' in request.POST:
+            price = request.POST['price']
+            # item = Listings.objects.get(pk=pk)
+            listing.update(current_price=price)
+            listing.update(buyer=user)
+            listing.save()
+        
+        if 'comment' in request.POST:
+            comment = request.POST['comment']
+            co = Comments(commenter=user, comment=comment, item=listing)
+            co.save()
+    
+    watchlist = True
+    unwatchable = False
+    comments = Comments.objects.filter(item=listing).order_by("-pk")
+    if request.user == listing.seller:
+        watchlist = False
+    if listing in user.watchlist:
+        unwatchable = True
+
+    min_price = listing.current_price + 1
+    return render(request, "auctions/listing.html", {
+        'listing': listing,
+        'comments' : comments,
+        'watchlist' : watchlist,
+        'unwatchable' : unwatchable,
+        'min_price' : min_price
+    })
+
+
+@login_required
+def watchlist(request, pk):
+    user = User.objects.get(username=request.user)
+    listing = Listings.objects.get(pk=pk) 
+    if listing in user.watchlist:
+        user.watchlist.remove(listing)
+    else:
+        user.watchlist.append(listing)
+    return HttpResponseRedirect(reverse("listing", kwargs={'pk': pk})) 
