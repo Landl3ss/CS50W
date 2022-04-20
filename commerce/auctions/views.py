@@ -124,7 +124,7 @@ def listing(request, pk):
 
 
 @login_required
-def watchlist(request, pk):
+def wl(request, pk):
     user = User.objects.get(username=request.user)
     listing = Listings.objects.get(pk=pk) 
     if listing in user.watchlist:

@@ -9,9 +9,9 @@
 
     {% if watchlist == True %}
         {% if unwatchable == False %}
-            <a href="{% url 'watchlist' pk=listing.pk %}">Add to Watchlist</a>
+            <a href="{% url 'wl' pk=listing.pk %}">Add to Watchlist</a>
         {% else %}
-            <a href="{% url 'watchlist' pk=listing.pk %}">Remove from Watchlist</a>
+            <a href="{% url 'wl' pk=listing.pk %}">Remove from Watchlist</a>
         {% endif %}
     {% endif %}
     <img src="{{ listing.image }}" width="400" height="500">
