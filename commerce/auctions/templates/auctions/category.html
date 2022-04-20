@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ categ }}</h2>
+
+    <ul>
+        {% for link in links %}
+        <div>
+            <li>
+                <img src="{{ listing.image }}" width="400" height="500">
+                <a href="{% url 'listing' pk=listing.pk %}">{{ listing.item }}</a> - ${{ listing.current_price }}
+            </li>
+        </div>
+    </ul>
+    
+
+{% endblock %}

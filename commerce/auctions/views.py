@@ -1,3 +1,4 @@
+from nis import cat
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -77,10 +78,7 @@ def create_listing(request):
         image_url = request.POST['image_url']
         desc = request.POST['description']
         category = request.POST['category']
-        if category == '' or category == None:
-            listing = Listings(seller=User.objects.get(username=request.user), item=item, description=desc, starting_price=starting_price, current_price=starting_price, image=image_url)
-        else:
-            listing = Listings(seller=User.objects.get(username=request.user), item=item, description=desc, starting_price=starting_price, current_price=starting_price, image=image_url, category=category)
+        listing = Listings(seller=User.objects.get(username=request.user), item=item, description=desc, starting_price=starting_price, current_price=starting_price, image=image_url, category=category)
         listing.save()
         # print(listing.seller)
         # print(listing.active)
@@ -144,4 +142,24 @@ def watchlist(request):
     user = User.objects.get(username=request.user)
     return render(request, 'auctions/watchlist.html', {
         'watchlist' : user.watchlist
+    })
+
+@login_required(login_url='login')
+def categories(request):
+    obj = Listings.object.all().filter(active=True)
+    categories = []
+    for i in obj:
+        if i.category not in categories:
+            categories.append(i.category)
+    return render(request, 'auctions/categories.html', {
+        'categories' : categories
+    })
+
+
+@login_required(login_url='login')
+def category(request, categ):
+    links = Listings.objects.all().filter(active=True, category=categ)
+    return render(request, 'auctions/category.html', {
+        'links' : links,
+        'categ' : categ
     })
