@@ -3,5 +3,13 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    <ul>
+        {% for listing in listings %}
+        <li>
+            <a href="{% url 'listing' pk=listing.pk %}">{{ listing.item }}</a> - ${{ listing.current_price }}
+        </li>
+        {% endfor %}
+    </ul>
+    
+
 {% endblock %}
