@@ -9,7 +9,7 @@ from .models import User, Listings, Bids, Comments
 
 
 def index(request):
-    listings = Listings.objects.all()
+    listings = Listings.objects.all().filter(active=True)
     # print(listings)
     return render(request, "auctions/index.html", {
         'listings': listings
@@ -136,4 +136,7 @@ def wl(request, pk):
 
 @login_required(login_url='login')
 def watchlist(request):
-    return render(request, 'auctions/watchlist.html')
+    user = User.objects.get(username=request.user)
+    return render(request, 'auctions/watchlist.html', {
+        'watchlist' : user.watchlist
+    })
