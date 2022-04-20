@@ -15,7 +15,6 @@ class Listings(models.Model):
     description = models.TextField(default=None)
     starting_price = models.DecimalField(max_digits=10, decimal_places=2, default=None)
     current_price = models.DecimalField(max_digits=10, decimal_places=2, default=None)
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='buyer')
     image = models.URLField(null=True, default=None)
     active = True
     category = []

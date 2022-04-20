@@ -95,10 +95,10 @@ def listing(request, pk):
     if request.method == 'POST':
         if 'price' in request.POST:
             price = request.POST['price']
-            # item = Listings.objects.get(pk=pk)
             listing.update(current_price=price)
-            listing.update(buyer=user)
             listing.save()
+            bid = Bids(bidder=user, amount=price, item=listing)
+            bid.save()
         
         if 'comment' in request.POST:
             comment = request.POST['comment']
