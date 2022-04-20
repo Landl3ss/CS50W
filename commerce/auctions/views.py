@@ -123,7 +123,7 @@ def listing(request, pk):
     })
 
 
-@login_required
+@login_required(login_url='login')
 def wl(request, pk):
     user = User.objects.get(username=request.user)
     listing = Listings.objects.get(pk=pk) 
@@ -132,3 +132,8 @@ def wl(request, pk):
     else:
         user.watchlist.append(listing)
     return HttpResponseRedirect(reverse("listing", kwargs={'pk': pk})) 
+
+
+@login_required(login_url='login')
+def watchlist(request):
+    return render(request, 'auctions/watchlist.html')
