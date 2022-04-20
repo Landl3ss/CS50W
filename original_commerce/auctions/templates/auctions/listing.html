@@ -1,0 +1,51 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+{{ listing.item }} from {{ listing.seller.username }}
+{% endblock %}
+
+
+{% block body %}
+
+    {% if watchlist == True %}
+        {% if unwatchable == False %}
+            <a href="{% url 'watchlist' pk=listing.pk %}">Add to Watchlist</a>
+        {% else %}
+            <a href="{% url 'watchlist' pk=listing.pk %}">Remove from Watchlist</a>
+        {% endif %}
+    {% endif %}
+    <img src="{{ listing.image }}" width="400" height="500">
+    <h3>{{ listing.item }}</h3>
+    <p>selling by user: {{ listing.seller }}</p>
+    <br>
+    <p>{{ listing.description }}</p>
+    <br>
+    <div>
+        <h5>${{ listing.current_price }}</h5>
+        {% if watchlist == True %}
+        <form method="post" action="{% url 'listing' pk=listing.pk %}">
+            <label for="price">Would you like to place a bid?</label>
+            <input type="number" name="price" id="price" min="{{ min_price }}">
+            <input class="btn btn-primary" type="submit" value="Bid!" name="bid">
+        </form>
+        {% endif %}
+    </div>
+    <br>
+    <form method="post" action="{% url 'listing' pk=listing.pk %}">
+        <div class="form-group">
+            <textarea class="form-control" name="comment" placeholder="Comment Here" rows="2" cols="10"></textarea>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Comment!" name="comment">
+    </form>
+    <ul>
+        {% for comment in comments %} 
+        <li>
+            <p>{{ comment.comment }}</p>
+            <p>from user: {{ comment.commenter }}</p>
+        </li>
+        {% empty %}
+        <p>No comments</p>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
