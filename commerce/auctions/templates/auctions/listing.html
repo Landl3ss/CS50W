@@ -14,6 +14,9 @@
             <a href="{% url 'wl' pk=listing.pk %}">Remove from Watchlist</a>
         {% endif %}
     {% endif %}
+    {% if listing.category %}
+    <p>{{ listing.category }}</p>
+    {% endif %}
     <img src="{{ listing.image }}" width="400" height="500">
     <h3>{{ listing.item }}</h3>
     <p>selling by user: {{ listing.seller }}</p>

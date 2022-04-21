@@ -17,7 +17,7 @@ class Listings(models.Model):
     current_price = models.DecimalField(max_digits=10, decimal_places=2, default=None)
     image = models.URLField(null=True, default=None)
     active = True
-    category = []
+    category = None
 
 class Bids(models.Model):
     bidder = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
