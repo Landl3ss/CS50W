@@ -20,11 +20,11 @@ class Listings(models.Model):
     category = models.CharField(max_length=20, default=None)
 
 class Bids(models.Model):
-    bidder = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='bidder')
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=None)
     item = models.ForeignKey(Listings, on_delete=models.CASCADE, default=None)
 
 class Comments(models.Model):
-    commenter = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='commenter')
     comment = models.TextField(default=None)
     item = models.ForeignKey(Listings, on_delete=models.CASCADE, default=None)
