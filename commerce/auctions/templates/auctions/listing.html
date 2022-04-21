@@ -13,6 +13,11 @@
         {% else %}
             <a href="{% url 'wl' pk=listing.pk %}">Remove from Watchlist</a>
         {% endif %}
+    
+    {% else %}
+        <div>
+            <a href="{% url 'closed' pk=listing.pk %}">Do you want to close this auction?</a>
+        </div>
     {% endif %}
     {% if listing.category %}
     <p>{{ listing.category }}</p>

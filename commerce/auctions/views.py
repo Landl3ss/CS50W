@@ -95,6 +95,21 @@ def listing(request, pk):
     user = User.objects.get(username=request.user)
     listing = Listings.objects.get(pk=pk)
 
+    if listing.active == False:
+        unwatch = False
+        you_won = False
+        winner = Bids.objects.get(pk=pk, amount=listing.current_price)
+        if winner.bidder == user:
+            you_won = True
+        if listing in user.watchlist:
+            unwatch = True
+        return render(request, "auctions/closed_listing.html", {
+        'listing' : listing,
+        'comments' : comments,
+        'you_won' : you_won,
+        'unwatch' : unwatch
+    })
+        
     if request.method == 'POST':
         if 'price' in request.POST:
             price = request.POST['price']
@@ -118,7 +133,7 @@ def listing(request, pk):
 
     min_price = listing.current_price + 1
     return render(request, "auctions/listing.html", {
-        'listing': listing,
+        'listing' : listing,
         'comments' : comments,
         'watchlist' : watchlist,
         'unwatchable' : unwatchable,
@@ -144,6 +159,7 @@ def watchlist(request):
         'watchlist' : user.watchlist
     })
 
+
 @login_required(login_url='login')
 def categories(request):
     obj = Listings.object.all().filter(active=True)
@@ -163,3 +179,11 @@ def category(request, categ):
         'links' : links,
         'categ' : categ
     })
+
+
+@login_required(login_url='login')
+def closed(request, pk):
+    act = Listings.objects.get(pk=pk)
+    act.active = False
+    act.save()
+    return HttpResponseRedirect(reverse("listing", kwargs={'pk': pk})) 
