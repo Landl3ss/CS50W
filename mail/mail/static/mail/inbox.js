@@ -18,7 +18,7 @@ function compose_email() {
   document.querySelector('#email').style.display = 'none';
 
   // Clear out composition fields
-  document.querySelector('#email').value = '';
+  document.querySelector('#to').value = '';
   document.querySelector('#subject').value = '';
   document.querySelector('#body').value = '';
 
@@ -39,11 +39,11 @@ function load_mailbox(mailbox) {
 }
 
 function send_email() {
-  const email = document.querySelector('#email').value;
-  const subject = document.querySelector('#subject').value;
-  const body = document.querySelector('#body').value;
+  let email = document.querySelector('#to').value;
+  let subject = document.querySelector('#subject').value;
+  let body = document.querySelector('#body').value;
   
-  fetch('emails', {
+  fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
       recipients: email,
@@ -51,36 +51,37 @@ function send_email() {
       body: body
     })
   })
-  .then(response => response.json());
-  // .then(result => {
-  //   console.log(result)
-  // });
+  .then(response => response.json())
+  .then(result => {
+    console.log(result)
+    return false;
+  });
 }
 
 function mb(mailbox) {
-  const view = document.querySelector('#mailbox');
+  let view = document.querySelector('#mailbox');
   fetch(`emails/${mailbox}`)
   .then(response => response.json())
-  // .then(result => {
-  //   console.log(result)
-  // });
   .then(emails => {
+    console.log(emails)
+  // })
+  // .then(email => {
 
     // The container holding all the emails
-    const container = document.createElement('div');
+    let container = document.createElement('div');
     container.style.display = "table";
     container.style.width = "100%";
 
-    const table = document.createElement('table');
+    let table = document.createElement('table');
     table.style.borderCollapse = "collapse";
     table.style.width = "100%";
 
-    const thead = document.createElement('thead');
-    const thead_tr = document.createElement('tr');
+    let thead = document.createElement('thead');
+    let thead_tr = document.createElement('tr');
 
-    const sender_td = document.createElement('td');
-    const subject_td = document.createElement('td');
-    const time_td = document.createElement('td');
+    let sender_td = document.createElement('td');
+    let subject_td = document.createElement('td');
+    let time_td = document.createElement('td');
     subject_td.style.textAlign = "center";
     time_td.style.textAlign = "right";
 
@@ -99,7 +100,7 @@ function mb(mailbox) {
     thead.appendChild(thead_tr);
     table.appendChild(thead);
 
-    const tbody = document.createElement('tbody');
+    let tbody = document.createElement('tbody');
 
     for(var i = 0; i < emails.length; i++) {
 
@@ -148,7 +149,7 @@ function view_email(id) {
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#email').style.display = 'block';
 
-  const view = document.querySelector('#email');
+  let view = document.querySelector('#email');
 
   fetch(`emails/${id}`, {
     method: 'PUT',
@@ -161,32 +162,39 @@ function view_email(id) {
   .then(response => response.json())
   .then(email => {
       // console.log(email);
-      const non_body = document.createElement("div");
-      const div_body = document.createElement("div");
-      const buttons = document.createElement("div");
-      const from_header = document.createElement('p');
-      const to_header = document.createElement('p');
-      const subject = document.createElement('p');
-      const time = document.createElement('p');
-      const reply = document.createElement('button');
+      let non_body = document.createElement("div");
+      let div_body = document.createElement("div");
+      let buttons = document.createElement("div");
+      let from_header = document.createElement('p');
+      let to_header = document.createElement('p');
+      let subject = document.createElement('p');
+      let time = document.createElement('p');
+      let reply = document.createElement('button');
       reply.setAttribute("class", "btn btn-sm btn-outline-primary");
       reply.innerHTML = "Reply";
+      reply.onclick = function () {
+        reply_to(email);
+      };
       buttons.append(reply);
       if (email.recipients.length > 1) {
+        let to_all = "";
         for (var i = 0; i < email.recipients.length; i++) {
-          const replyall = document.createElement('button');
-          replyall.innerHTML = "Reply all";
-          replyall.setAttribute("class", "btn btn-sm btn-outline-primary");
-          buttons.append(replyall);
+
           // do something with commas in between
-          to_header.innerHTML = `<b>To: </b> ${email.recipients}`;
+          var rec = email[i];
+          if (i != 0) {
+            to_all += `, ${rec.recipients}`;
+          } else {
+            to_all += `${rec.recipients}`;
+          }
         };
+        to_header.innerHTML = `<b>To: </b> ${to_all}`;
       } else {
         to_header.innerHTML = `<b>To: </b> ${email.recipients}`;
       }
-      const b = document.createElement('hr');
+      let b = document.createElement('hr');
 
-      const body = document.createElement('p');
+      let body = document.createElement('p');
 
       from_header.innerHTML = `<b>From: </b> ${email.sender}`;
       subject.innerHTML = `<b>Subject: </b> ${email.subject}`;
@@ -205,4 +213,24 @@ function view_email(id) {
       view.append(b);
       view.append(div_body);
     });
+}
+
+function reply_to(email) {
+
+  // Show compose view and hide other views
+  document.querySelector('#mailbox').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#email').style.display = 'none';
+
+  // Clear out composition fields
+  document.querySelector('#to').value = email.sender;
+  if (email.subject.slice(0,4) === "Re: ") {
+    document.querySelector('#subject').value = email.subject;
+  } else {
+    document.querySelector('#subject').value = `Re: ${email.subject}`;
+  }
+  document.querySelector('#body').value = `\n\nOn ${email.timestamp} ${email.sender} wrote: \n\n${email.body}`;
+
+  // Listening for an submition
+  document.querySelector('form').onsubmit = send_email;
 }
