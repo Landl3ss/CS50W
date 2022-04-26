@@ -13,8 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
 function compose_email() {
 
   // Show compose view and hide other views
-  document.querySelector('#view').style.display = 'none';
+  document.querySelector('#mailbox').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#email').style.display = 'none';
 
   // Clear out composition fields
   document.querySelector('#email').value = '';
@@ -28,11 +29,12 @@ function compose_email() {
 function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
-  document.querySelector('#view').style.display = 'block';
+  document.querySelector('#mailbox').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#email').style.display = 'none';
 
   // Show the mailbox name
-  document.querySelector('#view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  document.querySelector('#mailbox').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
   mb(mailbox);
 }
 
@@ -56,7 +58,7 @@ function send_email() {
 }
 
 function mb(mailbox) {
-  const view = document.querySelector('#view');
+  const view = document.querySelector('#mailbox');
   fetch(`emails/${mailbox}`)
   .then(response => response.json())
   // .then(result => {
@@ -66,92 +68,141 @@ function mb(mailbox) {
 
     // The container holding all the emails
     const container = document.createElement('div');
-    // container.style.border = "1px black solid";
+    container.style.display = "table";
+    container.style.width = "100%";
 
-    // The top divs that will hold the column names
-    const div_top = document.createElement('div');
-    const div_from_title = document.createElement('div');
-    const div_sub_title = document.createElement('div');
-    const div_time_title = document.createElement('div');
-    
-    div_top.style.display = "flex";
-    div_from_title.order = "1";
-    div_from_title.style.flexGrow = "2";
-    div_from_title.style.paddingLeft = "10px";
-    div_sub_title.order = "2";
-    div_sub_title.style.flexGrow = "2";
-    div_sub_title.style.paddingLeft = "10px";
-    div_time_title.order = "3";
-    div_time_title.style.flexGrow = "2";
-    div_time_title.style.paddingLeft = "10px";
+    const table = document.createElement('table');
+    table.style.borderCollapse = "collapse";
+    table.style.width = "100%";
 
-    // The names of the columns
-    div_from_title.innerHTML = "From";
-    div_sub_title.innerHTML = "Subject";
-    div_time_title.innerHTML = "Received";
+    const thead = document.createElement('thead');
+    const thead_tr = document.createElement('tr');
 
-    // Adding the names to the top row div
-    div_top.append(div_from_title);
-    div_top.append(div_sub_title);
-    div_top.append(div_time_title);
+    const sender_td = document.createElement('td');
+    const subject_td = document.createElement('td');
+    const time_td = document.createElement('td');
+    subject_td.style.textAlign = "center";
+    time_td.style.textAlign = "right";
 
-    // Top row added to the top of the container
-    container.append(div_top);
+    sender_td.innerHTML = "From";
+    subject_td.innerHTML = "Subject";
+    time_td.innerHTML = "Received";
+
+    sender_td.style.fontWeight = 'bold';
+    subject_td.style.fontWeight = 'bold';
+    time_td.style.fontWeight = 'bold';
+
+    thead_tr.appendChild(sender_td);
+    thead_tr.appendChild(subject_td);
+    thead_tr.appendChild(time_td);
+
+    thead.appendChild(thead_tr);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
 
     for(var i = 0; i < emails.length; i++) {
 
       // Getting each emails
       var obj = emails[i];
 
-      // Container other than the top row
-      const div_container = document.createElement('div');
-      div_container.style.borderLeft = "2px black solid";
-      div_container.style.borderRight = "2px black solid";
-      
-      if (i === 0) {
-        div_container.style.borderTop = "2px black solid";
-      } else {
-        div_container.style.borderTop = "1px black solid";
+      let email_tr = document.createElement('tr');
+      let sender = document.createElement('td');
+      let subject = document.createElement('td');
+      let time = document.createElement('td');
+
+      subject.style.textAlign = "center";
+      time.style.textAlign = "right";
+
+      sender.innerHTML = obj.sender;
+      subject.innerHTML = obj.subject;
+      time.innerHTML = obj.timestamp;
+
+      email_tr.appendChild(sender);
+      email_tr.appendChild(subject);
+      email_tr.appendChild(time);
+
+      email_tr.style.border = "1px solid #888888";
+      email_tr.onclick = function () {
+        view_email(obj.id);
+      };
+
+      if (obj.read === true) {
+        email_tr.style.backgroundColor = "#dddddd";
       }
-      if (i === (emails.length - 1)) {
-        div_container.style.borderBottom = "2px black solid";
-      } else {
-        div_container.style.borderBottom = "1px black solid";
-      }
-      div_container.style.display = "flex";
-
-      // Sender, Subject, and Time divs
-      const div_sender = document.createElement('div');
-      const div_subject = document.createElement('div');
-      const div_time = document.createElement('div');
-
-      // Making the whole div a link
-      const email_link = document.createElement('a');
-
-      // Padding, Flex, and other CSS modifiers.
-      div_sender.innerHTML = obj.sender;
-      div_sender.style.order = "1";
-      div_sender.style.paddingLeft = "10px";
-
-      div_subject.innerHTML = obj.subject;
-      div_subject.style.order = "2";
-      div_subject.style.paddingLeft = "10px";
-
-      div_time.innerHTML = obj.timestamp;
-      div_time.style.order = "3";
-      div_time.style.paddingLeft = "10px";
-
-      // Adding into the container as a whole
-      div_container.append(div_sender);
-      div_container.append(div_subject);
-      div_container.append(div_time);
-
-      // Sending the row container to the main container
-      email_link.append(div_container);
-      container.append(email_link);
+      tbody.appendChild(email_tr);
     };
 
+    table.appendChild(tbody);
+
+    container.append(table)
     // Added to the whole
     view.append(container);
   });
+}
+
+function view_email(id) {
+
+  // Show the mailbox and hide other views
+  document.querySelector('#mailbox').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#email').style.display = 'block';
+
+  const view = document.querySelector('#email');
+
+  fetch(`emails/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        read: true
+    })
+  })
+
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
+      // console.log(email);
+      const non_body = document.createElement("div");
+      const div_body = document.createElement("div");
+      const buttons = document.createElement("div");
+      const from_header = document.createElement('p');
+      const to_header = document.createElement('p');
+      const subject = document.createElement('p');
+      const time = document.createElement('p');
+      const reply = document.createElement('button');
+      reply.setAttribute("class", "btn btn-sm btn-outline-primary");
+      reply.innerHTML = "Reply";
+      buttons.append(reply);
+      if (email.recipients.length > 1) {
+        for (var i = 0; i < email.recipients.length; i++) {
+          const replyall = document.createElement('button');
+          replyall.innerHTML = "Reply all";
+          replyall.setAttribute("class", "btn btn-sm btn-outline-primary");
+          buttons.append(replyall);
+          // do something with commas in between
+          to_header.innerHTML = `<b>To: </b> ${email.recipients}`;
+        };
+      } else {
+        to_header.innerHTML = `<b>To: </b> ${email.recipients}`;
+      }
+      const b = document.createElement('hr');
+
+      const body = document.createElement('p');
+
+      from_header.innerHTML = `<b>From: </b> ${email.sender}`;
+      subject.innerHTML = `<b>Subject: </b> ${email.subject}`;
+      time.innerHTML = `<b>Time: </b> ${email.timestamp}`;
+      
+      body.innerHTML = email.body;
+      div_body.append(body);
+
+      non_body.append(from_header);
+      non_body.append(to_header);
+      non_body.append(subject);
+      non_body.append(time);
+      non_body.append(buttons);
+
+      view.append(non_body);
+      view.append(b);
+      view.append(div_body);
+    });
 }
