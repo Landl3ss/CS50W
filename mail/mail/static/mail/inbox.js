@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
+
 function compose_email() {
 
   // Show compose view and hide other views
@@ -26,6 +27,7 @@ function compose_email() {
   document.querySelector('form').onsubmit = send_email;
 }
 
+
 function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
@@ -37,6 +39,7 @@ function load_mailbox(mailbox) {
   document.querySelector('#mailbox').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
   mb(mailbox);
 }
+
 
 function send_email() {
   let email = document.querySelector('#to').value;
@@ -58,12 +61,13 @@ function send_email() {
   });
 }
 
+
 function mb(mailbox) {
   let view = document.querySelector('#mailbox');
   fetch(`emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
-    console.log(emails)
+    // console.log(emails)
   // })
   // .then(email => {
 
@@ -122,11 +126,12 @@ function mb(mailbox) {
       email_tr.appendChild(sender);
       email_tr.appendChild(subject);
       email_tr.appendChild(time);
+      email_tr.setAttribute("id", `${obj.id}`)
 
       email_tr.style.border = "1px solid #888888";
-      email_tr.onclick = function () {
-        view_email(obj.id);
-      };
+      // email_tr.onclick = function () {
+      //   view_email(obj.id);
+      // };
 
       if (obj.read === true) {
         email_tr.style.backgroundColor = "#dddddd";
@@ -139,8 +144,13 @@ function mb(mailbox) {
     container.append(table)
     // Added to the whole
     view.append(container);
+
+    document.querySelectorAll("tr").forEach(row => row.onclick = function() {
+      view_email(row.id);
+    })
   });
 }
+
 
 function view_email(id) {
 
@@ -149,7 +159,9 @@ function view_email(id) {
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#email').style.display = 'block';
 
+  document.querySelector('#email').innerHTML = "";
   let view = document.querySelector('#email');
+
 
   fetch(`emails/${id}`, {
     method: 'PUT',
@@ -161,7 +173,7 @@ function view_email(id) {
   fetch(`/emails/${id}`)
   .then(response => response.json())
   .then(email => {
-      // console.log(email);
+      console.log(email);
       let non_body = document.createElement("div");
       let div_body = document.createElement("div");
       let buttons = document.createElement("div");
@@ -170,12 +182,25 @@ function view_email(id) {
       let subject = document.createElement('p');
       let time = document.createElement('p');
       let reply = document.createElement('button');
+      let to_archive = document.createElement('button');
+      if (email.archived === false) {
+        to_archive.innerHTML = "Archive?";
+      } else {
+        to_archive.innerHTML = "Unarchive?";
+      }
+      to_archive.setAttribute("class", "btn btn-sm btn-outline-primary");
       reply.setAttribute("class", "btn btn-sm btn-outline-primary");
       reply.innerHTML = "Reply";
       reply.onclick = function () {
         reply_to(email);
       };
+      to_archive.onclick = function () {
+        archive_move(email);
+      }
+      // reply.style.margin = "20px";
+      to_archive.style.marginLeft = "20px";
       buttons.append(reply);
+      buttons.append(to_archive);
       if (email.recipients.length > 1) {
         let to_all = "";
         for (var i = 0; i < email.recipients.length; i++) {
@@ -202,6 +227,9 @@ function view_email(id) {
       
       body.innerHTML = email.body;
       div_body.append(body);
+      // div_body.append(body.innerHTML.replace(/\n/g, "</p><p>"));
+      // console.log(body.innerHTML.replace(/\n/g, </p><p>));
+      console.log(body.innerHTML);
 
       non_body.append(from_header);
       non_body.append(to_header);
@@ -214,6 +242,7 @@ function view_email(id) {
       view.append(div_body);
     });
 }
+
 
 function reply_to(email) {
 
@@ -233,4 +262,23 @@ function reply_to(email) {
 
   // Listening for an submition
   document.querySelector('form').onsubmit = send_email;
+}
+
+
+function archive_move(email) {
+  if (email.archived === true) {
+    fetch(`/emails/${email.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          archived: false
+      })
+    })
+  } else {
+    fetch(`/emails/${email.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          archived: true
+      })
+    })
+  }
 }
