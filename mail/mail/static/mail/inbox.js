@@ -219,7 +219,12 @@ function view_email(id) {
       }
       let b = document.createElement('hr');
 
-      let body = document.createElement('p');
+      let body = document.createElement('textarea');
+      body.style.outline = "none";
+      body.style.resize = "none";
+      body.style.width = "100%";
+      body.style.maxWidth = "100%";
+      body.style.border = "none";
 
       from_header.innerHTML = `<b>From: </b> ${email.sender}`;
       subject.innerHTML = `<b>Subject: </b> ${email.subject}`;
