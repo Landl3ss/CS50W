@@ -1,0 +1,190 @@
+/* --- Tags --- */
+
+
+body {
+    background-color: #fff780;
+}
+
+input {
+    max-height: 30px;
+    margin: 5px;
+}
+
+
+/* --- Classes --- */
+
+
+.mycontainer {
+    /* border-style: solid;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px; */
+    background-color: #fff780;
+    /* margin: 1px; */
+    margin-bottom: 1px;
+    margin-left: 1px;
+    margin-top: 1px;
+    margin-right: 1px;
+    position: relative;
+    text-align: center;
+}
+
+.subcontainer {
+    /* margin: .1%; */
+    padding-left: 1px;
+    padding-top: 3%;
+}
+
+.title {
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    width: fit-content;
+}
+
+
+/* --- Ids --- */
+
+
+#apc {
+    /* background-color: yellow; */
+    /* display: grid; */
+    /* gap: 1px; */
+    padding-bottom: 5%; 
+    /* position: relative; */
+}
+
+#apc_container {
+    grid-area: apc;
+}
+
+#chamber {
+    /* background-color: brown; */
+    padding-bottom: 5%;
+}
+
+/* #chamber .row {
+    display: inline;
+    padding: 3%;
+} */
+
+#chamber_container {
+    grid-area: chamber;
+}
+
+#edvt {
+    /* background-color: darkcyan; */
+    padding-bottom: 5%; 
+}
+
+#edvt_container {
+    grid-area: edvt;
+}
+
+#image {
+    /* background-color: green; */
+    /* display: inline; */
+    padding-bottom: 5%;
+}
+/* 
+#image .row {
+    display: inline;
+    padding: 3%;
+} */
+
+#image_container {
+    grid-area: image;
+}
+
+#ios {
+    /* background-color: palegreen; */
+    padding-bottom: 5%;
+}
+
+#ios_container {
+    grid-area: ios;
+}
+
+#ixia {
+    padding-bottom: 2%;
+    padding-top: 2%;
+}
+
+/* #ixia .row {
+    display: inline;
+    column-count: 2;
+    padding: 1.5%;
+} */
+
+#ixia_container {
+    grid-area: ixia;
+}
+
+#master_container {
+    background-color: #e1da70;
+    display: grid;
+    grid-template-areas: 'uut image user_defined' 'chamber apc ixia' 'prompts ios edvt' 'powersupply';
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-bottom: 1px;
+    padding-left: 1px;
+    padding-top: 1px;
+    padding-right: 1px;
+}
+
+/* #master_container > .mycontainer {
+    flex-grow: 1;
+} */
+
+/* #powersupply {
+    background-color: violet;
+    display: flex;
+    flex-wrap: wrap;
+    column-count: 2;
+} */
+
+
+#powersupply_container {
+    grid-area: powersupply;
+}
+
+#prompts {
+    /* background-color: grey; */
+    padding-bottom: 5%;
+}
+
+#prompts_container {
+    grid-area: prompts;
+}
+
+#user_defined {
+    /* background-color: pink; */
+    /* display: inline; */
+    padding-bottom: 5%;
+}
+
+/* #user_defined .row {
+    display: inline;
+    padding: 3%;
+} */
+
+#user_defined_container {
+    grid-area: user_defined;
+}
+
+#uut {
+    /* background-color: blue; */
+    padding-bottom: 5%;
+    /* position: relative; */
+}
+
+/* #uut .row {
+    color: green;
+    display: inline;
+    padding: 3%;
+} */
+
+#uut_container {
+    grid-area: uut;
+}

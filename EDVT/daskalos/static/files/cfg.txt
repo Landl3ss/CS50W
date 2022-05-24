@@ -1,0 +1,113 @@
+# Config file for EDVT script
+
+[version]
+cfg_version = 1.02
+
+[uut]
+#BLD 14 EDVT
+uutIP = 172.31.133.2
+uutPort = 2011
+
+[apc]
+apcIP = apc ip 
+apcPort1 = apc port 1
+apcPort2 = apc port 2
+apcPwd = apc -c
+
+[chamber]
+chamberIP = chamberip
+chamberPort = chamberport
+chamberType = chamber type
+
+[ixia]
+ixiaIP1 = ixia ip 1
+ixiaIP2 = ixia ip 2
+ixiaCardType = ixia card type
+ixiaCard1 = ixcard1
+ixiaCard2 = ixcard2
+ixiaCard3 = ixcard3
+ixiaCard4 = ixcard4
+ixiaPort1 = ixport1
+ixiaPort2 = ixport2
+ixiaPort3 = ixport3
+ixiaPort4 = ixport4
+ixiaUser = ixia user
+ixiaVersion = ixversion
+
+[edvt]
+run_type = nxos
+corner_1 = corn1
+corner_2 = corn2
+corner_3 = corn3
+corner_4 = corn4
+high_temp = hitemp
+low_temp = lotemp
+nom_temp = nomtemp
+loopPerCorner = loop per corner
+timePerCorner = time per corner
+stopOnFailure = stop on failure
+tempEnable = no
+powerCycle = yes
+marginPwr = yes
+bootuut = no
+
+powerOffWaitTime = pwer off wait time
+powerOffSoakTime = pwr off soak time
+powerOnWaitTime = pwr on wait time
+powerOnSoakTime = pwr on soak time
+
+[pwrsupply]
+pwrNumMarg = pnm
+pwr0 = p0
+pwr0_hi = p0h
+pwr0_lo = p0l
+pwr1 = p1
+pwr1_hi = p1h
+pwr1_lo = p1l
+pwr2 = p2
+pwr2_hi = p2h
+pwr2_lo = p2l
+pwr3 = p3
+pwr3_hi = p3h
+pwr3_lo = p3l
+pwr4 = p4
+pwr4_hi = p4h
+pwr4_lo = p4l
+pwr5 = p5
+pwr5_hi = p5h
+pwr5_lo = p5l
+pwr6 = p6
+pwr6_hi = p6h
+pwr6_lo = p6l
+pwr7 = p7
+pwr7_hi = p7h
+pwr7_lo = p7l
+
+[prompts]
+bios_pmpt = bios prompt
+diag_pmpt = diagprompt
+dsh_pmpt = dsh promtp
+
+ios_pmpt = ios prompt
+ios_dp_pmpt = ios dsp prompt
+ios_cfg_pmpt = ios cfg prompt
+ios_cfgif_pmpt = ios cfgif prompt
+ios_brcm_pmpt = ios brm prompt
+
+[ios]
+ios_login = ios login
+ios_pswd = ios passwd
+ios_traffic_time = ios traffic
+ios_sleep_interval = ios sleep
+ixia_cfg_file = ixia cfg file
+ixia_start_cfg_file = ixia start
+ixia_stop_cfg_file = ixia stop
+ixia_dump_cnt_cfg_file ixia dmp
+
+[image]
+diag_image = diagimage
+ios_image = iosimage
+
+[user_defined]
+user_diag_test = userdiagimage
+user_ios_test = useriosimage

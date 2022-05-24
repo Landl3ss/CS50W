@@ -1,0 +1,176 @@
+/* --- Tags --- */
+
+
+body {
+    background-color: #fff780;
+}
+
+input {
+    max-height: 30px;
+    margin: 5px;
+}
+
+
+/* --- Classes --- */
+
+
+.mycontainer {
+    background-color: #fff780;
+    position: relative;
+}
+
+.subcontainer {
+    padding-left: 1px;
+    padding-top: 22px;
+}
+
+.title {
+    font-weight: bold;
+    height: 20px;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, 0%);
+    width: fit-content;
+}
+
+
+/* --- IDs --- */
+
+
+#apc_container {
+    grid-area: apc;
+}
+
+#bootuut_div {
+    grid-area: bootuut;
+}
+
+#chamber_container {
+    grid-area: chamber;
+}
+
+#edvtchecks {
+    display: grid;
+    grid-area: edvtchecks;
+    grid-template-areas: 
+        'temp powercycle'
+        'marginpower bootuut';
+}
+
+#edvtother {
+    display: grid;
+    grid-template-areas: 
+        'edvtchecks runtype';
+}
+
+#edvt_container {
+    grid-area: edvt;
+}
+
+#image_container {
+    grid-area: image;
+}
+
+#ios_container {
+    grid-area: ios;
+}
+
+#ixia_container {
+    grid-area: ixia;
+}
+
+#marginpower_div {
+    grid-area: marginpower;
+}
+
+#master_container {
+    background-color: #e1da70;
+    display: grid;
+    gap: 1px;
+    grid-template-areas:
+        'uut image userdefined ixia'
+        'edvt edvt chamber ixia'
+        'prompts prompts apc ios'
+        'powersupply powersupply powersupply powersupply';
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-bottom: 1px;
+    padding-left: 1px;
+    padding-top: 1px;
+    padding-right: 1px;
+}
+
+#powercycle_div {
+    grid-area: powercycle;
+}
+
+#powersupply_container {
+    grid-area: powersupply;
+}
+
+#prompts_container {
+    grid-area: prompts;
+}
+
+#runtype_div {
+    grid-area: runtype;
+}
+
+#tempenabled_div {
+    grid-area: temp;
+}
+
+#user_defined_container {
+    grid-area: userdefined;
+}
+
+#uut_container {
+    grid-area: uut;
+}
+
+
+/* --- Media Queries --- */
+
+
+@media (max-width: 1500px) {
+    #master_container {
+        background-color: #e1da70;
+        display: grid;
+        gap: 1px;
+        grid-template-areas: 
+            'uut image userdefined'
+            'chamber apc ios'
+            'prompts prompts ios'
+            'edvt edvt ixia'
+            'powersupply powersupply ixia';
+        margin-left: 2%;
+        margin-right: 2%;
+        padding-bottom: 1px;
+        padding-left: 1px;
+        padding-top: 1px;
+        padding-right: 1px;
+    }
+}
+
+@media (max-width: 700px) {
+    input {
+        margin-left: 2.5%;
+        margin-right: 2.5%;
+        text-align: center;
+        width: 95%;
+    }
+    
+    #master_container {
+        background-color: #e1da70;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 1px;
+        margin-left: 1%;
+        margin-right: 1%;
+        padding-bottom: 1px;
+        padding-left: 1px;
+        padding-top: 1px;
+        padding-right: 1px;
+    }
+}
