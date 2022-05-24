@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let editor_python = CodeMirror.fromTextArea(te_python, {
             mode: "python",
             lineNumbers: true,
-            extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
             foldGutter: true,
             gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
             indentWithTabs: true,
@@ -23,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelector('#save_button').addEventListener('click', () => {
             editor_python.save();
-            editor_python.toTextArea();
-            // editor_python.getTextArea();
+            // editor_python.toTextArea();
+            console.log(editor_python.getTextArea());
 
             document.getElementById('code_editor').style.display = 'block';
             document.getElementById('edit_button_div').style.display = 'block';
