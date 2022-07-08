@@ -20,20 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
             indentUnit: 4
         });
 
-        document.querySelector('#save_button').addEventListener('click', () => {
-            editor_python.save();
-            // editor_python.toTextArea();
-            console.log(editor_python.getTextArea());
-
-            document.getElementById('code_editor').style.display = 'block';
-            document.getElementById('edit_button_div').style.display = 'block';
-            document.getElementById('edit_buttons').style.display = 'none';
-
-            // var sb = document.getElementById("save_edit");
-            // sb.click();
-            
-        })
+        document.querySelector('#cancel_button').addEventListener('click', () => {
+            let filename = document.getElementById('filename_location').innerHTML;
+            fetch(`file_redirect/${filename}`)
+        });
 
     })
-});
-    
+}); 
