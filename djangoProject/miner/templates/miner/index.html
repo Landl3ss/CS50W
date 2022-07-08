@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <title>Should you mine Bitcoin (BTC)?</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="{% static 'miner/styles.css' %}">
+    </head>
+    <body>
+        <div id="body">
+            <div id="question_div">
+                <h1 id="question">Should you mine Bitcoin (BTC)?</h1>
+                <label for="state_input" id="state_question">What state are you curious about?</label>
+                <select name="state_input" id="state_input" onchange="cost_function()">
+                        <option disabled selected value> ------ select a state ------ </option>
+                    {% for state in states %}
+                        <option class="price_kwh" value="{{ state.avg_price_per_kwh }}">{{ state.state }}, {{ state.abrv }}</option>
+                    {% endfor %}
+                </select>
+                <h3 id="answer"></h3>
+                <h4 id="explanation"></h4>
+            </div>
+        <p hidden id="price_btc">{{ minutes.price }}</p>
+            <p><span class="faq">How do we calculate this?:</span> Each state has their own average for kwh, the average amount of energy to mine a bitcoin is roughly 143000kwh, then we calculate the cost of the selected state's average kwh cost and then see if its lower or higher than the price of a bitcoin.</p>
+        </div>
+    <script src="{% static 'miner/index.js' %}"></script>
+    <script type="text/JavaScript">
+
+        function cost_function() {
+            var select = document.getElementById('state_input');
+            var option = select.options[select.selectedIndex].value;
+            {#alert(option);#}
+
+
+            let x = parseFloat(option);
+            let y = 143000;
+
+            let z = x * y;
+
+            let btc_price = parseFloat(document.getElementById('price_btc').innerHTML);
+            let ans = document.getElementById('answer');
+            let exp = document.getElementById('explanation');
+
+            if (btc_price >= z) {
+                ans.innerHTML = "YES!!";
+                ans.style.color = "green";
+                exp.innerHTML = `The cost of a btc is ${btc_price} and the to mine it would cost ${z}`;
+            } else {
+                ans.innerHTML = "No!";
+                ans.style.color = "red";
+                exp.innerHTML = `The cost of a btc is ${btc_price} and the to mine it would cost ${z}`;
+            }
+        }
+</script>
+    </body>
+</html>

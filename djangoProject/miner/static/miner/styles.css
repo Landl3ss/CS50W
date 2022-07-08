@@ -1,0 +1,23 @@
+/* --- Tags --- */
+
+body {
+    background-color: #efdf91;
+}
+
+/* --- Classes --- */
+
+.faq {
+    font-weight: bold;
+}
+
+/* --- IDs --- */
+
+#question {
+    font-size: 90px;
+    text-align: center;
+}
+
+#state_question {
+    font-weight: bold;
+    text-align: center;
+}
