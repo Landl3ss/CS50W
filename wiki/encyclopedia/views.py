@@ -86,9 +86,11 @@ def search(request):
         if content.lower() in j.lower():
             potential_list.append(j)
         if content.lower() == j.lower():
+            md = Markdown()
             return render(request, "encyclopedia/entry.html", {
                 'entry' : j.lower(),
-                'data' : util.get_entry(j.lower())
+                #'data' : util.get_entry(j.lower())
+                'data' : md.convert(util.get_entry(j.lower()))
             })
     if len(potential_list) == 0:
         return render(request, 'encyclopedia/unknowns.html', {
