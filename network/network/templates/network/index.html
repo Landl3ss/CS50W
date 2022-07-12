@@ -1,0 +1,96 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+{% load static %}
+<div id="post_feed">
+    {% if user.is_authenticated %}
+    <div class="speechentry">
+        <form id="post_input" method="post" action="{% url 'post_entry' sendto='index' %}">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input class="form-control" id="index_speech" type="text" name="speech" placeholder="Create a Post..." aria-describedby="basic-addon2" aria-label="Create a Post...">
+                <div class="input-group-append">
+                    <input id="index_submitbutton" class="btn btn-outline-secondary" type="button" value="Post!">
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+    <div class="all_posts">
+        {% for post in posts %}
+            <div id="{{ post.id }}" class="post_div">
+                {% if post.same == True %}
+                    <div class="edit_post_div">
+                        <p class="edit_post">Edit?</p>
+                    </div>
+                {% endif %}
+                <div class="subject_div">
+                    <p class="subject">{{ post.text }}</p>
+                </div>
+                <div class="written_div">
+                    <p style="color: grey;">Written by: <a class="author" href="/profile/{{ post.author }}">{{ post.author }}</a></p>
+                </div>
+                <div class="extras">
+                    <div class="datetime">
+                        <p>{{ post.time }}</p>
+                    </div>
+                    <p class="heart_button"></p>
+                    <p class="likes"></p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+<div class="footer">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if previous != False %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'page' num=previous %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif%}
+            {% for number in paginated.page_range %}
+                {% if number == 1 %}
+                    {% if number == p %}
+                        <li class="page-item active" aria-current="page"><a class="page-link" href="#">1<span class="sr-only">(current)</span></a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="{% url 'page' num=number%}">1</a></li>
+                    {% endif %}
+                {% elif number == p %}
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ number }}<span class="sr-only">(current)</span></a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="{% url 'page' num=number %}">{{ number }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if next != False %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'page' num=next %}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Next" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+      </nav>
+</div>
+
+<script type="module" src="{% static 'network/index.js' %}">
+
+</script>
+
+
+{% endblock %}

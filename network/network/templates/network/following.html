@@ -1,0 +1,81 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+{% load static %}
+<div>
+    <div id="following_post_feed">
+        <div class="following_all_posts">
+            {% for post in following_posts %}
+                <div id="{{ post.id }}" class="post_div">
+                    <div class="subject_div">
+                        <p class="subject">{{ post.text }}</p>
+                    </div>
+                    <div class="written_div">
+                        <p style="color: grey;">Written by: <a class="author" href="/profile/{{ post.author }}">{{ post.author }}</a></p>
+                    </div>
+                    <div>
+                        <div class="datetime">
+                            <p>{{ post.time }}</p>
+                        </div>
+                        {% if user.is_authenticated %}
+                            <p class="heart_button"></p>
+                        {% endif %}
+                        <p class="likes"></p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if previous != False %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'following_page' num=previous %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif%}
+            {% for number in paginated.page_range %}
+                {% if number == 1 %}
+                    {% if number == p %}
+                        <li class="page-item active" aria-current="page"><a class="page-link" href="#">1<span class="sr-only">(current)</span></a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="{% url 'following_page' num=number %}">1</a></li>
+                    {% endif %}
+                {% elif number == p %}
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ number }}<span class="sr-only">(current)</span></a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="{% url 'following_page' num=number %}">{{ number }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if next != False %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'following_page' num=next %}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Next" tabindex="-1" aria-disabled="true">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+      </nav>
+</div>
+
+<script type="module" src="{% static 'network/following.js' %}">
+
+</script>
+
+
+{% endblock %}
